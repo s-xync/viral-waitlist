@@ -30,6 +30,10 @@ connection.once("open", () => {
   console.log("MongoDB database connection established successfully");
 });
 
+// product routes
+const productRouter = require("./routes/product.routes");
+app.use("/product", productRouter);
+
 // any routes that does not match above
 app.get("*", (req, res) => {
   res.status(HttpStatus.NOT_FOUND).json({ message: "Route Not Found." });

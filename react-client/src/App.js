@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import AlertsView from "./components/AlertsView";
-import ProductCreate from "./components/ProductCreate";
-import Products from "./components/Products";
+import Router from "./Router";
 
 class App extends Component {
   state = {
@@ -41,22 +39,10 @@ class App extends Component {
           handleDismissSuccessMessage={this.handleDismissSuccessMessage}
           handleDismissErrorMessage={this.handleDismissErrorMessage}
         />
-        <Router>
-          <Switch>
-            <Route exact path="/product/create">
-              <ProductCreate
-                handleAddErrorMessages={this.handleAddErrorMessages}
-                handleAddSuccessMessage={this.handleAddSuccessMessage}
-              />
-            </Route>
-            <Route path="*">
-              <Products
-                handleAddErrorMessages={this.handleAddErrorMessages}
-                handleAddSuccessMessage={this.handleAddSuccessMessage}
-              />
-            </Route>
-          </Switch>
-        </Router>
+        <Router
+          handleAddErrorMessages={this.handleAddErrorMessages}
+          handleAddSuccessMessage={this.handleAddSuccessMessage}
+        />
       </div>
     );
   }
