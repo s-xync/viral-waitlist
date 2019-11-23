@@ -42,39 +42,42 @@ class Products extends Component {
 
   noProducts = () => <h1 className="text-center">No Products Found</h1>;
 
-  renderProducts = products => (
-    <Row>
-      {products.map(product => (
-        <Col lg="4" md="6" xs="12" style={{ marginBottom: "0.5rem" }}>
-          <Card>
-            <CardBody>
-              <CardTitle>
-                <h5>{product.productName}</h5>
-              </CardTitle>
-              <CardSubtitle
-                className="text-muted"
-                style={{ fontSize: "0.8rem" }}
-              >
-                Created by <strong>{product.creatorName}</strong> on{" "}
-                <strong>
-                  {dayjs(product.createdAt).format("DD-MM-YYYY hh:mm A")}
-                </strong>
-              </CardSubtitle>
-              <CardText>{product.productDescription}</CardText>
-              <Button
-                color="link"
-                onClick={() =>
-                  this.props.history.push(`/product/${product._id}`)
-                }
-              >
-                View Product
-              </Button>
-            </CardBody>
-          </Card>
-        </Col>
-      ))}
-    </Row>
-  );
+  renderProducts = () => {
+    const { products } = this.state;
+    return (
+      <Row>
+        {products.map(product => (
+          <Col lg="4" md="6" xs="12" style={{ marginBottom: "0.5rem" }}>
+            <Card>
+              <CardBody>
+                <CardTitle>
+                  <h5>{product.productName}</h5>
+                </CardTitle>
+                <CardSubtitle
+                  className="text-muted"
+                  style={{ fontSize: "0.8rem" }}
+                >
+                  Created by <strong>{product.creatorName}</strong> on{" "}
+                  <strong>
+                    {dayjs(product.createdAt).format("DD-MM-YYYY hh:mm A")}
+                  </strong>
+                </CardSubtitle>
+                <CardText>{product.productDescription}</CardText>
+                <Button
+                  color="link"
+                  onClick={() =>
+                    this.props.history.push(`/product/${product._id}`)
+                  }
+                >
+                  View Product
+                </Button>
+              </CardBody>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    );
+  };
 
   render() {
     const { spinner, products } = this.state;
@@ -92,7 +95,7 @@ class Products extends Component {
         <div style={{ marginTop: "2rem" }}>
           {spinner && <CustomSpinner height="10rem" width="10rem" />}
           {!spinner && products.length === 0 && this.noProducts()}
-          {!spinner && products.length > 0 && this.renderProducts(products)}
+          {!spinner && products.length > 0 && this.renderProducts()}
         </div>
       </Container>
     );

@@ -72,4 +72,31 @@ const allProducts = async (req, res) => {
   }
 };
 
-module.exports = { createProduct, allProducts };
+const singleProduct = async (req, res) => {
+  try {
+    const product = await Product.findOne({ _id: req.params.id });
+    if (!product) {
+      return res.status(HttpStatus.NOT_FOUND).json({
+        success: false,
+        errors: [
+          {
+            msg: "Product not found. Please select a different product."
+          }
+        ]
+      });
+    }
+    return res.json({ product, msg: "Product retrieved successfully." });
+  } catch (err) {
+    console.log(err);
+    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      errors: [
+        {
+          msg: "Something went wrong. Please try again."
+        }
+      ]
+    });
+  }
+};
+
+module.exports = { createProduct, allProducts, singleProduct };

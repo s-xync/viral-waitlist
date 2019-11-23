@@ -66,7 +66,7 @@ class ProductCreate extends Component {
     }
   };
 
-  render() {
+  productCreateForm = () => {
     const {
       creatorName,
       creatorEmail,
@@ -74,6 +74,72 @@ class ProductCreate extends Component {
       productDescription,
       waiting
     } = this.state;
+    return (
+      <Card style={{ marginTop: "1rem", marginBottom: "2rem" }}>
+        <CardHeader>Enter Product Details</CardHeader>
+        <CardBody>
+          <Form>
+            <FormGroup>
+              <Label>Name</Label>
+              <span style={{ color: "red", marginLeft: "0.1rem" }}>*</span>
+              <Input
+                type="text"
+                name="creatorName"
+                placeholder="The Professor"
+                value={creatorName}
+                onChange={this.handleInputChange}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>Email</Label>
+              <span style={{ color: "red", marginLeft: "0.1rem" }}>*</span>
+              <Input
+                type="email"
+                name="creatorEmail"
+                placeholder="theprofessor@lacasadepapel.com"
+                value={creatorEmail}
+                onChange={this.handleInputChange}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>Product Name</Label>
+              <span style={{ color: "red", marginLeft: "0.1rem" }}>*</span>
+              <Input
+                type="text"
+                name="productName"
+                placeholder="La Casa De Papel"
+                value={productName}
+                onChange={this.handleInputChange}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>Product Description</Label>
+              <span style={{ color: "red", marginLeft: "0.1rem" }}>*</span>
+              <Input
+                type="textarea"
+                name="productDescription"
+                placeholder="La Casa De Papel is ..."
+                value={productDescription}
+                onChange={this.handleInputChange}
+              />
+            </FormGroup>
+            {waiting && (
+              <Button color="primary" disabled>
+                Please wait...
+              </Button>
+            )}
+            {!waiting && (
+              <Button color="primary" type="submit" onClick={this.handleSubmit}>
+                Create Product
+              </Button>
+            )}
+          </Form>
+        </CardBody>
+      </Card>
+    );
+  };
+
+  render() {
     return (
       <Container>
         <h2>Create Product Waitlist</h2>
@@ -85,72 +151,7 @@ class ProductCreate extends Component {
         >
           View Products <i className="fas fa-angle-right" />
         </Button>
-
-        <Card style={{ marginTop: "1rem", marginBottom: "2rem" }}>
-          <CardHeader>Enter Product Details</CardHeader>
-          <CardBody>
-            <Form>
-              <FormGroup>
-                <Label>Name</Label>
-                <span style={{ color: "red", marginLeft: "0.1rem" }}>*</span>
-                <Input
-                  type="text"
-                  name="creatorName"
-                  placeholder="The Professor"
-                  value={creatorName}
-                  onChange={this.handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label>Email</Label>
-                <span style={{ color: "red", marginLeft: "0.1rem" }}>*</span>
-                <Input
-                  type="email"
-                  name="creatorEmail"
-                  placeholder="theprofessor@lacasadepapel.com"
-                  value={creatorEmail}
-                  onChange={this.handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label>Product Name</Label>
-                <span style={{ color: "red", marginLeft: "0.1rem" }}>*</span>
-                <Input
-                  type="text"
-                  name="productName"
-                  placeholder="La Casa De Papel"
-                  value={productName}
-                  onChange={this.handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label>Product Description</Label>
-                <span style={{ color: "red", marginLeft: "0.1rem" }}>*</span>
-                <Input
-                  type="textarea"
-                  name="productDescription"
-                  placeholder="La Casa De Papel is ..."
-                  value={productDescription}
-                  onChange={this.handleInputChange}
-                />
-              </FormGroup>
-              {waiting && (
-                <Button color="primary" disabled>
-                  Please wait...
-                </Button>
-              )}
-              {!waiting && (
-                <Button
-                  color="primary"
-                  type="submit"
-                  onClick={this.handleSubmit}
-                >
-                  Create Product
-                </Button>
-              )}
-            </Form>
-          </CardBody>
-        </Card>
+        <div style={{ marginTop: "2rem" }}>{this.productCreateForm()}</div>
       </Container>
     );
   }
