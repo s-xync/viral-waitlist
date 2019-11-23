@@ -1,6 +1,7 @@
 const Product = require("../models/product.model");
 const HttpStatus = require("http-status-codes");
 const { validationResult } = require("express-validator");
+const { mailgunHelper } = require("../config/mailgun");
 
 const create = async (req, res) => {
   try {
@@ -26,6 +27,19 @@ const create = async (req, res) => {
       productName,
       productDescription
     });
+
+    const mailData = {
+      from: process.env.MAILGUN_FROM,
+      to: creatorEmail,
+      subject: `Your product has been created on Viral Waitlist`,
+      text: `Your product has been created on Viral Waitlist. You can access the leaderboard for your product using the following link ${process.env.CLIENT_URL}/product/${product._id}.`
+    };
+
+    try {
+      await mailgunHelper.messages().send(mailData);
+    } catch (err) {
+      console.log(err);
+    }
 
     return res.json({ product, msg: "Product created successfully." });
   } catch (err) {

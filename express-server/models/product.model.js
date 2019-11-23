@@ -23,6 +23,10 @@ const productSchema = new Schema(
       type: String,
       required: true,
       trim: true
+    },
+    waitlist: {
+      type: Number,
+      default: 0
     }
   },
   {
