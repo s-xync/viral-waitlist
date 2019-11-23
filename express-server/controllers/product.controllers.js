@@ -3,7 +3,7 @@ const HttpStatus = require("http-status-codes");
 const { validationResult } = require("express-validator");
 const { mailgunHelper } = require("../config/mailgun");
 
-const create = async (req, res) => {
+const createProduct = async (req, res) => {
   try {
     const errors = validationResult(req);
 
@@ -55,4 +55,21 @@ const create = async (req, res) => {
   }
 };
 
-module.exports = { create };
+const allProducts = async (req, res) => {
+  try {
+    const products = await Product.find().sort({ createdAt: "desc" });
+    return res.json({ products, msg: "Products retrieved successfully." });
+  } catch (err) {
+    console.log(err);
+    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      errors: [
+        {
+          msg: "Something went wrong. Please try again."
+        }
+      ]
+    });
+  }
+};
+
+module.exports = { createProduct, allProducts };

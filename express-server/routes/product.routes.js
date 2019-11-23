@@ -18,7 +18,9 @@ router.post(
       .isLength({ min: 1 })
       .withMessage("Please enter product description")
   ],
-  ProductControllers.create
+  ProductControllers.createProduct
 );
+
+router.get("/all", ProductControllers.allProducts);
 
 module.exports = router;
