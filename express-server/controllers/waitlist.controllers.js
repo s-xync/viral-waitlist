@@ -35,8 +35,9 @@ const joinWaitlist = async (req, res) => {
 
     if (waitlistExists) {
       return res.json({
-        msg: "You have already joined the waitlist.",
-        waitlist: waitlistExists
+        waitlist: waitlistExists,
+        referralLink: `${process.env.CLIENT_URL}/product/${waitlistExists.product}?referral=${waitlistExists._id}`,
+        msg: "You have already joined the waitlist."
       });
     }
 
@@ -62,6 +63,19 @@ const joinWaitlist = async (req, res) => {
 
       referralWaitlist.refers += 1;
       await referralWaitlist.save();
+
+      const mailData = {
+        from: process.env.MAILGUN_FROM,
+        to: referralWaitlist.email,
+        subject: `Your product referral has been used on Viral Waitlist`,
+        text: `Your product referral has been used on Viral Waitlist for ${product.productName} by ${name}. You can check your position on the leaderboard using the following link ${process.env.CLIENT_URL}/product/${product._id}.\n\nYou can refer this product using the following link ${process.env.CLIENT_URL}/product/${product._id}?referral=${referralWaitlist._id}. By referring this product, you will grow on the leaderboard and have a chance to skip several positions in the wailist.`
+      };
+
+      try {
+        await mailgunHelper.messages().send(mailData);
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     const mailData = {
@@ -79,6 +93,7 @@ const joinWaitlist = async (req, res) => {
 
     return res.json({
       waitlist,
+      referralLink: `${process.env.CLIENT_URL}/product/${product._id}?referral=${waitlist._id}`,
       msg: "You have joined the waitlist successfully."
     });
   } catch (err) {
@@ -94,4 +109,35 @@ const joinWaitlist = async (req, res) => {
   }
 };
 
-module.exports = { joinWaitlist };
+const getDetails = async (req, res) => {
+  try {
+    const { email } = req.query;
+    const waitlist = await Waitlist.findOne({ email });
+    if (!waitlist) {
+      return res.status(HttpStatus.NOT_FOUND).json({
+        errors: [
+          {
+            msg: "You have not joined the wailist. Please join the waitlist."
+          }
+        ]
+      });
+    }
+    return res.json({
+      waitlist,
+      referralLink: `${process.env.CLIENT_URL}/product/${waitlist.product}?referral=${waitlist._id}`,
+      msg: "Waitlist details retrieved successfully."
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      errors: [
+        {
+          msg: "Something went wrong. Please try again."
+        }
+      ]
+    });
+  }
+};
+
+module.exports = { joinWaitlist, getDetails };
