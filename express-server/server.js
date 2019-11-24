@@ -34,6 +34,10 @@ connection.once("open", () => {
 const productRouter = require("./routes/product.routes");
 app.use("/product", productRouter);
 
+// waitlist routes
+const waitlistRouter = require("./routes/waitlist.routes");
+app.use("/waitlist", waitlistRouter);
+
 // any routes that does not match above
 app.get("*", (req, res) => {
   res.status(HttpStatus.NOT_FOUND).json({ message: "Route Not Found." });
