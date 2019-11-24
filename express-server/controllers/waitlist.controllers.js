@@ -34,8 +34,15 @@ const joinWaitlist = async (req, res) => {
     });
 
     if (waitlistExists) {
+      const waitlists = await Waitlist.find({ product: product._id }).sort({
+        refers: "desc",
+        createdAt: "desc",
+        waitlistPosition: "desc"
+      });
+
       return res.json({
         waitlist: waitlistExists,
+        waitlists,
         referralLink: `${process.env.CLIENT_URL}/product/${waitlistExists.product}?referral=${waitlistExists._id}`,
         msg: "You have already joined the waitlist."
       });
@@ -91,8 +98,15 @@ const joinWaitlist = async (req, res) => {
       console.log(err);
     }
 
+    const waitlists = await Waitlist.find({ product: product._id }).sort({
+      refers: "desc",
+      createdAt: "desc",
+      waitlistPosition: "desc"
+    });
+
     return res.json({
       waitlist,
+      waitlists,
       referralLink: `${process.env.CLIENT_URL}/product/${product._id}?referral=${waitlist._id}`,
       msg: "You have joined the waitlist successfully."
     });

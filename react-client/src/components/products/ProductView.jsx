@@ -5,22 +5,16 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Row,
-  Col
+  Modal
 } from "reactstrap";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import dayjs from "dayjs";
 import CustomSpinner from "../utils/CustomSpinner";
+import WaitlistModalCheck from "./WaitlistModalCheck";
+import WaitlistModalDetails from "./WaitlistModalDetails";
 import WaitlistTableView from "./WaitlistTableView";
-import "./css/ProductView.css";
+import WaitlistModalJoin from "./WaitlistModalJoin";
 
 class ProductView extends Component {
   state = {
@@ -93,7 +87,7 @@ class ProductView extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  handleWaitlistSubmit = async event => {
+  handleJoinWaitlistSubmit = async event => {
     event.preventDefault();
     this.setState({ waiting: true });
     const { name, email, product } = this.state;
@@ -122,6 +116,7 @@ class ProductView extends Component {
         name: "",
         email: "",
         waitlist: response.data.waitlist,
+        waitlists: response.data.waitlists,
         referralLink: response.data.referralLink
       });
       localStorage.removeItem("referral");
@@ -138,55 +133,6 @@ class ProductView extends Component {
         ]);
       }
     }
-  };
-
-  waitlistModalJoinStage = () => {
-    const { name, email, product, waiting } = this.state;
-    return (
-      <>
-        <ModalHeader toggle={this.toggleModal}>
-          Join waitlist for {product.productName}
-        </ModalHeader>
-        <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label>Name</Label>
-              <Input
-                type="text"
-                name="name"
-                value={name}
-                onChange={this.handleInputChange}
-                placeholder="The Professor"
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label>Email</Label>
-              <Input
-                type="email"
-                name="email"
-                value={email}
-                onChange={this.handleInputChange}
-                placeholder="theprofessor@lacasadepapel.com"
-              />
-            </FormGroup>
-            {waiting && (
-              <Button color="success" disabled>
-                Please wait...
-              </Button>
-            )}
-            {!waiting && (
-              <Button
-                type="submit"
-                color="success"
-                onClick={this.handleWaitlistSubmit}
-              >
-                Join Waitlist
-              </Button>
-            )}
-          </Form>
-        </ModalBody>
-      </>
-    );
   };
 
   handleCheckDetailsSubmit = async event => {
@@ -227,45 +173,6 @@ class ProductView extends Component {
     }
   };
 
-  waitlistModalCheckStage = () => {
-    const { email, waiting, product } = this.state;
-    return (
-      <>
-        <ModalHeader toggle={this.toggleModal}>
-          Check your waitlist for {product.productName}
-        </ModalHeader>
-        <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label>Email</Label>
-              <Input
-                type="email"
-                name="email"
-                value={email}
-                onChange={this.handleInputChange}
-                placeholder="theprofessor@lacasadepapel.com"
-              />
-            </FormGroup>
-            {waiting && (
-              <Button color="success" disabled>
-                Please wait...
-              </Button>
-            )}
-            {!waiting && (
-              <Button
-                type="submit"
-                color="success"
-                onClick={this.handleCheckDetailsSubmit}
-              >
-                Check Details
-              </Button>
-            )}
-          </Form>
-        </ModalBody>
-      </>
-    );
-  };
-
   copyToClipboard = text => {
     var textField = document.createElement("textarea");
     textField.innerText = text;
@@ -276,57 +183,49 @@ class ProductView extends Component {
     this.props.handleAddSuccessMessage("Referral link copied to clipboard.");
   };
 
-  waitlistModalDetailsStage = () => {
-    const { waitlist, product, referralLink } = this.state;
-    return (
-      <>
-        <ModalHeader toggle={this.toggleModal}>
-          Your waitlist details for {product.productName}
-        </ModalHeader>
-        <ModalBody>
-          <div
-            className="text-center"
-            style={{ fontSize: "3rem", color: "green" }}
-          >
-            <i className="far fa-check-circle" />
-          </div>
-          <div className="text-center">
-            <h4>Thank you for joining the waitlist.</h4>
-            <p>Your waitlist position is {waitlist.waitlistPosition}.</p>
-            <p>Your have referred {waitlist.refers} people till now.</p>
-            <p>
-              By referring this product, you will grow on the leaderboard and
-              have a chance to skip several positions in the wailist. Please use
-              the following link to refer the product to someone you know.
-            </p>
-            <div className="referral-link">
-              <Row>
-                <Col xs="9" className="referral-link-text">
-                  {referralLink}
-                </Col>
-                <Col xs="1"></Col>
-                <Col
-                  xs="2"
-                  className="referral-link-icon"
-                  onClick={() => this.copyToClipboard(referralLink)}
-                >
-                  <i className="fas fa-copy" />
-                </Col>
-              </Row>
-            </div>
-          </div>
-        </ModalBody>
-      </>
-    );
-  };
-
   waitlistModal = () => {
-    const { modal, modalStage, waitlist } = this.state;
+    const {
+      modal,
+      modalStage,
+      waitlist,
+      product,
+      referralLink,
+      email,
+      name,
+      waiting
+    } = this.state;
     return (
       <Modal isOpen={modal} toggle={this.toggleModal}>
-        {modalStage === "join" && !waitlist && this.waitlistModalJoinStage()}
-        {modalStage === "check" && !waitlist && this.waitlistModalCheckStage()}
-        {waitlist && this.waitlistModalDetailsStage()}
+        {modalStage === "join" && !waitlist && (
+          <WaitlistModalJoin
+            product={product}
+            email={email}
+            name={name}
+            waiting={waiting}
+            handleInputChange={this.handleInputChange}
+            handleJoinWaitlistSubmit={this.handleJoinWaitlistSubmit}
+            toggleModal={this.toggleModal}
+          />
+        )}
+        {modalStage === "check" && !waitlist && (
+          <WaitlistModalCheck
+            product={product}
+            email={email}
+            waiting={waiting}
+            handleInputChange={this.handleInputChange}
+            handleCheckDetailsSubmit={this.handleCheckDetailsSubmit}
+            toggleModal={this.toggleModal}
+          />
+        )}
+        {waitlist && (
+          <WaitlistModalDetails
+            waitlist={waitlist}
+            product={product}
+            referralLink={referralLink}
+            copyToClipboard={this.copyToClipboard}
+            toggleModal={this.toggleModal}
+          />
+        )}
       </Modal>
     );
   };
