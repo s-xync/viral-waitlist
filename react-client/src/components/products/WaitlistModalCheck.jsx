@@ -34,7 +34,7 @@ const WaitlistModalCheck = ({
           />
         </FormGroup>
         {waiting && (
-          <Button color="success" disabled>
+          <Button color="info" disabled>
             Please wait...
           </Button>
         )}
