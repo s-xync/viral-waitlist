@@ -1,4 +1,5 @@
 const Product = require("../models/product.model");
+const Waitlist = require("../models/waitlist.model");
 const HttpStatus = require("http-status-codes");
 const { validationResult } = require("express-validator");
 const { mailgunHelper } = require("../config/mailgun");
@@ -85,7 +86,18 @@ const singleProduct = async (req, res) => {
         ]
       });
     }
-    return res.json({ product, msg: "Product retrieved successfully." });
+
+    const waitlists = await Waitlist.find({ product: product._id }).sort({
+      refers: "desc",
+      createdAt: "desc",
+      waitlistPosition: "desc"
+    });
+
+    return res.json({
+      product,
+      waitlists,
+      msg: "Product retrieved successfully."
+    });
   } catch (err) {
     console.log(err);
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({

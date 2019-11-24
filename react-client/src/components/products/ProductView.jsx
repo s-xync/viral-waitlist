@@ -19,12 +19,14 @@ import { withRouter } from "react-router-dom";
 import axios from "axios";
 import dayjs from "dayjs";
 import CustomSpinner from "../utils/CustomSpinner";
+import WaitlistTableView from "./WaitlistTableView";
 import "./css/ProductView.css";
 
 class ProductView extends Component {
   state = {
     spinner: true,
     product: null,
+    waitlists: null,
     modal: false,
     name: "",
     email: "",
@@ -48,7 +50,11 @@ class ProductView extends Component {
         `${process.env.REACT_APP_SERVER_URL}/product/${this.props.match.params.id}`
       );
       handleAddSuccessMessage(response.data.msg);
-      this.setState({ spinner: false, product: response.data.product });
+      this.setState({
+        spinner: false,
+        product: response.data.product,
+        waitlists: response.data.waitlists
+      });
     } catch (err) {
       this.setState({ spinner: false });
       if (err.response && err.response.status === 404) {
@@ -326,7 +332,8 @@ class ProductView extends Component {
   };
 
   renderProduct = () => {
-    const { product, modal } = this.state;
+    const { product, waitlists } = this.state;
+    console.log(waitlists);
     return (
       <>
         <Card style={{ marginTop: "1rem", marginBottom: "2rem" }}>
@@ -343,6 +350,7 @@ class ProductView extends Component {
             <p>
               <strong>Waitlist Size: {product.waitlist}</strong>
             </p>
+            <WaitlistTableView waitlists={waitlists} />
           </CardBody>
         </Card>
         {this.waitlistModal()}
