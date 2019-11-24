@@ -15,4 +15,6 @@ router.post(
   WaitlistControllers.joinWaitlist
 );
 
+router.get("/details", WaitlistControllers.getDetails);
+
 module.exports = router;

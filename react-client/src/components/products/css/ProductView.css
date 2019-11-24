@@ -1,0 +1,22 @@
+.referral-link {
+  padding: 0.4rem 1rem 0.4rem 1rem;
+  background-color: grey;
+  border-radius: 0.2rem;
+}
+
+.referral-link-text {
+  font-size: 0.9rem;
+  color: white;
+}
+
+.referral-link-icon {
+  cursor: pointer;
+  font-size: 1.3rem;
+  margin: auto;
+  color: white;
+  transition: all 0.1s;
+}
+
+.referral-link-icon:hover {
+  transform: scale(1.1, 1.1);
+}

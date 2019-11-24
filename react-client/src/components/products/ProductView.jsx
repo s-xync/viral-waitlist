@@ -11,12 +11,15 @@ import {
   Form,
   FormGroup,
   Label,
-  Input
+  Input,
+  Row,
+  Col
 } from "reactstrap";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import dayjs from "dayjs";
 import CustomSpinner from "../utils/CustomSpinner";
+import "./css/ProductView.css";
 
 class ProductView extends Component {
   state = {
@@ -27,6 +30,7 @@ class ProductView extends Component {
     email: "",
     waiting: false,
     waitlist: null,
+    referralLink: "",
     modalStage: "join" // join, check
   };
 
@@ -60,8 +64,23 @@ class ProductView extends Component {
     }
   }
 
-  toggleModal = () => {
+  toggleModal = async () => {
     this.setState({ modal: !this.state.modal });
+    this.setState({
+      email: "",
+      name: "",
+      waitlist: null,
+      referralLink: "",
+      waiting: false
+    });
+  };
+
+  toggleModalJoinWaitlist = () => {
+    this.setState({ modal: true, modalStage: "join" });
+  };
+
+  toggleModalCheckWaitlist = () => {
+    this.setState({ modal: true, modalStage: "check" });
   };
 
   handleInputChange = event => {
@@ -93,7 +112,12 @@ class ProductView extends Component {
       );
       this.setState({ waiting: false });
       handleAddSuccessMessage(response.data.msg);
-      this.setState({ name: "", email: "", waitlist: response.data.waitlist });
+      this.setState({
+        name: "",
+        email: "",
+        waitlist: response.data.waitlist,
+        referralLink: response.data.referralLink
+      });
       localStorage.removeItem("referral");
     } catch (err) {
       this.setState({ waiting: false });
@@ -159,6 +183,44 @@ class ProductView extends Component {
     );
   };
 
+  handleCheckDetailsSubmit = async event => {
+    event.preventDefault();
+    this.setState({ waiting: true });
+    const { email } = this.state;
+    const { handleAddErrorMessages, handleAddSuccessMessage } = this.props;
+    if (!email) {
+      handleAddErrorMessages([{ msg: "All fields are required." }]);
+      this.setState({ waiting: false });
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/waitlist/details`,
+        {
+          params: {
+            email
+          }
+        }
+      );
+      this.setState({ waiting: false });
+      handleAddSuccessMessage(response.data.msg);
+      this.setState({
+        email: "",
+        waitlist: response.data.waitlist,
+        referralLink: response.data.referralLink
+      });
+    } catch (err) {
+      this.setState({ waiting: false });
+      if (err.response) {
+        handleAddErrorMessages(err.response.data.errors);
+      } else {
+        handleAddErrorMessages([
+          { msg: "Something went wrong. Please try again." }
+        ]);
+      }
+    }
+  };
+
   waitlistModalCheckStage = () => {
     const { email, waiting, product } = this.state;
     return (
@@ -166,19 +228,88 @@ class ProductView extends Component {
         <ModalHeader toggle={this.toggleModal}>
           Check your waitlist for {product.productName}
         </ModalHeader>
-        <ModalBody>waitlist modal check stage</ModalBody>
+        <ModalBody>
+          <Form>
+            <FormGroup>
+              <Label>Email</Label>
+              <Input
+                type="email"
+                name="email"
+                value={email}
+                onChange={this.handleInputChange}
+                placeholder="theprofessor@lacasadepapel.com"
+              />
+            </FormGroup>
+            {waiting && (
+              <Button color="success" disabled>
+                Please wait...
+              </Button>
+            )}
+            {!waiting && (
+              <Button
+                type="submit"
+                color="success"
+                onClick={this.handleCheckDetailsSubmit}
+              >
+                Check Details
+              </Button>
+            )}
+          </Form>
+        </ModalBody>
       </>
     );
   };
 
+  copyToClipboard = text => {
+    var textField = document.createElement("textarea");
+    textField.innerText = text;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand("copy");
+    textField.remove();
+    this.props.handleAddSuccessMessage("Referral link copied to clipboard.");
+  };
+
   waitlistModalDetailsStage = () => {
-    const { waitlist, product } = this.state;
+    const { waitlist, product, referralLink } = this.state;
     return (
       <>
         <ModalHeader toggle={this.toggleModal}>
           Your waitlist details for {product.productName}
         </ModalHeader>
-        <ModalBody>waitlist modal details stage</ModalBody>
+        <ModalBody>
+          <div
+            className="text-center"
+            style={{ fontSize: "3rem", color: "green" }}
+          >
+            <i className="far fa-check-circle" />
+          </div>
+          <div className="text-center">
+            <h4>Thank you for joining the waitlist.</h4>
+            <p>Your waitlist position is {waitlist.waitlistPosition}.</p>
+            <p>Your have referred {waitlist.refers} people till now.</p>
+            <p>
+              By referring this product, you will grow on the leaderboard and
+              have a chance to skip several positions in the wailist. Please use
+              the following link to refer the product to someone you know.
+            </p>
+            <div className="referral-link">
+              <Row>
+                <Col xs="9" className="referral-link-text">
+                  {referralLink}
+                </Col>
+                <Col xs="1"></Col>
+                <Col
+                  xs="2"
+                  className="referral-link-icon"
+                  onClick={() => this.copyToClipboard(referralLink)}
+                >
+                  <i className="fas fa-copy" />
+                </Col>
+              </Row>
+            </div>
+          </div>
+        </ModalBody>
       </>
     );
   };
@@ -232,14 +363,24 @@ class ProductView extends Component {
           View Products <i className="fas fa-angle-right" />
         </Button>
         {!spinner && product && (
-          <Button
-            outline
-            color="success"
-            onClick={this.toggleModal}
-            style={{ marginLeft: "1rem" }}
-          >
-            Join Waitlist <i className="fas fa-angle-right" />
-          </Button>
+          <>
+            <Button
+              outline
+              color="success"
+              onClick={this.toggleModalJoinWaitlist}
+              style={{ marginLeft: "1rem" }}
+            >
+              Join Waitlist <i className="fas fa-angle-right" />
+            </Button>
+            <Button
+              outline
+              color="info"
+              onClick={this.toggleModalCheckWaitlist}
+              style={{ marginLeft: "1rem" }}
+            >
+              Check Waitlist Details <i className="fas fa-angle-right" />
+            </Button>
+          </>
         )}
         <div style={{ marginTop: "2rem" }}>
           {spinner && <CustomSpinner height="10rem" width="10rem" />}
