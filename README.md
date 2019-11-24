@@ -2,7 +2,7 @@
 
 ### You can access the live version of this project [here](https://viral-waitlist.surge.sh/).  
 
-This is a simple viral waitlist. Anybody can create a product. And they can share the URL to the product so that people can join waitlist. Any person after joining waitlist will get an email. The person who joined waitlist can also refer other people using the referral link. Whenever someone uses referral link to signup, both persons will receive email. Anybody can view the leaderboard and the other details of the product. 
+This is a simple viral waitlist app. Anybody can create a product. And they can share the URL to the product so that people can join the waitlist. Any person after joining waitlist will get an email. The person who joined waitlist can also refer other people using the referral link. Whenever someone uses referral link to signup, both persons will receive email. Anybody can view the leaderboard and the other details of the product. 
 
 The app uses React for the frontend.  
 The app uses Express, MongoDB for the backend.  
