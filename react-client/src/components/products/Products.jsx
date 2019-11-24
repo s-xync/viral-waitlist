@@ -13,7 +13,9 @@ import {
 import dayjs from "dayjs";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
-import CustomSpinner from "./CustomSpinner";
+import CustomSpinner from "../utils/CustomSpinner";
+import "./css/Products.css";
+
 class Products extends Component {
   state = {
     spinner: true,
@@ -47,8 +49,11 @@ class Products extends Component {
     return (
       <Row>
         {products.map(product => (
-          <Col lg="4" md="6" xs="12" style={{ marginBottom: "0.5rem" }}>
-            <Card>
+          <Col xs="12" key={product._id} className="product-card-outer">
+            <Card
+              className="product-card"
+              onClick={() => this.props.history.push(`/product/${product._id}`)}
+            >
               <CardBody>
                 <CardTitle>
                   <h5>{product.productName}</h5>
@@ -57,20 +62,16 @@ class Products extends Component {
                   className="text-muted"
                   style={{ fontSize: "0.8rem" }}
                 >
-                  Created by <strong>{product.creatorName}</strong> on{" "}
-                  <strong>
-                    {dayjs(product.createdAt).format("DD-MM-YYYY hh:mm A")}
-                  </strong>
+                  <p>
+                    Created by <strong>{product.creatorName}</strong> on{" "}
+                    <strong>
+                      {dayjs(product.createdAt).format("DD-MM-YYYY hh:mm A")}
+                    </strong>
+                  </p>
                 </CardSubtitle>
-                <CardText>{product.productDescription}</CardText>
-                <Button
-                  color="link"
-                  onClick={() =>
-                    this.props.history.push(`/product/${product._id}`)
-                  }
-                >
-                  View Product
-                </Button>
+                <CardText className="product-card-text">
+                  {product.productDescription}
+                </CardText>
               </CardBody>
             </Card>
           </Col>

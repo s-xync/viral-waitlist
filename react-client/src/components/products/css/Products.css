@@ -1,0 +1,14 @@
+.product-card-outer {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.product-card {
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.product-card:hover {
+  z-index: 1;
+  transform: scale(1.01, 1.01);
+}

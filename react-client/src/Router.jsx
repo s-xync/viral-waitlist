@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import ProductCreate from "./components/ProductCreate";
-import Products from "./components/Products";
-import ProductView from "./components/ProductView";
+import ProductCreate from "./components/products/ProductCreate";
+import Products from "./components/products/Products";
+import ProductView from "./components/products/ProductView";
 
 const Router = ({ handleAddErrorMessages, handleAddSuccessMessage }) => (
   <BrowserRouter>

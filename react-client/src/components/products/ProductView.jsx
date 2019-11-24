@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Container, Button, Card, CardBody, CardHeader } from "reactstrap";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
-import CustomSpinner from "./CustomSpinner";
+import CustomSpinner from "../utils/CustomSpinner";
 
 class ProductView extends Component {
   state = {
@@ -37,9 +37,9 @@ class ProductView extends Component {
     const { product } = this.state;
     return (
       <Card style={{ marginTop: "1rem", marginBottom: "2rem" }}>
-        <CardHeader>Product Details</CardHeader>
+        <CardHeader>Product Details & Leaderboard</CardHeader>
         <CardBody>
-          <h2>Leaderboard Table</h2>
+          <h3>{product.productName}</h3>
         </CardBody>
       </Card>
     );
@@ -49,7 +49,7 @@ class ProductView extends Component {
     const { spinner, product } = this.state;
     return (
       <Container>
-        <h2>Product Leaderboard</h2>
+        <h2>Product Details & Leaderboard</h2>
         <hr />
         <Button
           outline

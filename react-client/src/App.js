@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import AlertsView from "./components/AlertsView";
+import AlertsView from "./components/utils/AlertsView";
 import Router from "./Router";
 
 class App extends Component {
@@ -32,7 +32,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="App" style={{ marginTop: "1rem" }}>
         <AlertsView
           successMessages={this.state.successMessages}
           errorMessages={this.state.errorMessages}
