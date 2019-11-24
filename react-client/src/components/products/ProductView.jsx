@@ -340,6 +340,9 @@ class ProductView extends Component {
               </strong>
             </p>
             <p>{product.productDescription}</p>
+            <p>
+              <strong>Waitlist Size: {product.waitlist}</strong>
+            </p>
           </CardBody>
         </Card>
         {this.waitlistModal()}

@@ -72,6 +72,9 @@ class Products extends Component {
                 <CardText className="product-card-text">
                   {product.productDescription}
                 </CardText>
+                <CardText>
+                  <strong>Waitlist Size: {product.waitlist}</strong>
+                </CardText>
               </CardBody>
             </Card>
           </Col>
