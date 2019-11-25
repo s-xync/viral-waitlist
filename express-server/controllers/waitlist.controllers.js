@@ -38,8 +38,7 @@ const joinWaitlist = async (req, res) => {
     if (waitlistExists) {
       const waitlists = await Waitlist.find({ product: product._id }).sort({
         refers: "desc",
-        createdAt: "desc",
-        waitlistPosition: "desc"
+        waitlistPosition: "asc"
       });
 
       return res.json({
@@ -108,8 +107,7 @@ const joinWaitlist = async (req, res) => {
 
     const waitlists = await Waitlist.find({ product: product._id }).sort({
       refers: "desc",
-      createdAt: "desc",
-      waitlistPosition: "desc"
+      waitlistPosition: "asc"
     });
 
     return res.json({

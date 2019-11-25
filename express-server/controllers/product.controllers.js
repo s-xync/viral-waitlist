@@ -89,8 +89,7 @@ const singleProduct = async (req, res) => {
 
     const waitlists = await Waitlist.find({ product: product._id }).sort({
       refers: "desc",
-      createdAt: "desc",
-      waitlistPosition: "desc"
+      waitlistPosition: "asc"
     });
 
     return res.json({
