@@ -15,7 +15,7 @@ const WaitlistTableView = ({ waitlists }) => (
       </thead>
       <tbody>
         {waitlists.map((waitlist, index) => (
-          <tr>
+          <tr key={waitlist._id}>
             <th scope="row">{index + 1}</th>
             <td>{waitlist.name}</td>
             <td>{waitlist.refers}</td>

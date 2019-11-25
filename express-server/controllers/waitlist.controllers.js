@@ -20,6 +20,8 @@ const joinWaitlist = async (req, res) => {
 
     const product = await Product.findOne({ _id: req.params.id });
 
+    let referralUsed = false;
+
     if (!product) {
       return res.status(HttpStatus.NOT_FOUND).json({
         errors: [
@@ -44,6 +46,7 @@ const joinWaitlist = async (req, res) => {
         waitlist: waitlistExists,
         waitlists,
         referralLink: `${process.env.CLIENT_URL}/product/${waitlistExists.product}?referral=${waitlistExists._id}`,
+        referralUsed,
         msg: "You have already joined the waitlist."
       });
     }
@@ -64,7 +67,12 @@ const joinWaitlist = async (req, res) => {
     product.waitlist += 1;
     await product.save();
 
-    if (referralWaitlist) {
+    if (
+      referralWaitlist &&
+      String(referralWaitlist.product) === String(product._id)
+    ) {
+      referralUsed = true;
+
       waitlist.referral = referralWaitlist._id;
       await waitlist.save();
 
@@ -108,6 +116,7 @@ const joinWaitlist = async (req, res) => {
       waitlist,
       waitlists,
       referralLink: `${process.env.CLIENT_URL}/product/${product._id}?referral=${waitlist._id}`,
+      referralUsed,
       msg: "You have joined the waitlist successfully."
     });
   } catch (err) {

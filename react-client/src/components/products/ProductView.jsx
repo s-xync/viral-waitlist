@@ -119,7 +119,10 @@ class ProductView extends Component {
         waitlists: response.data.waitlists,
         referralLink: response.data.referralLink
       });
-      localStorage.removeItem("referral");
+      if (response.data.referralUsed) {
+        handleAddSuccessMessage("Referral used successfully.");
+        localStorage.removeItem("referral");
+      }
     } catch (err) {
       this.setState({ waiting: false });
       if (err.response && err.response.status === 404) {
@@ -232,7 +235,6 @@ class ProductView extends Component {
 
   renderProduct = () => {
     const { product, waitlists } = this.state;
-    console.log(waitlists);
     return (
       <>
         <Card style={{ marginTop: "1rem", marginBottom: "2rem" }}>
