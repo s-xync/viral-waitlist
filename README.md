@@ -53,7 +53,7 @@ yarn start
 ![8](https://raw.githubusercontent.com/s-xync/viral-waitlist/master/pics/Screen%20Shot%202019-11-24%20at%204.04.05%20PM.png)
 ![9](https://raw.githubusercontent.com/s-xync/viral-waitlist/master/pics/Screen%20Shot%202019-11-24%20at%204.04.41%20PM.png)
 ![10](https://raw.githubusercontent.com/s-xync/viral-waitlist/master/pics/Screen%20Shot%202019-11-24%20at%204.05.55%20PM.png)
-![11](https://raw.githubusercontent.com/s-xync/viral-waitlist/master/pics/Screen%20Shot%202019-11-24%20at%204.06.21%20PM.png)
+![11](https://raw.githubusercontent.com/s-xync/viral-waitlist/master/pics/Screen%20Shot%202019-11-25%20at%203.48.04%20PM.png)
 ![12](https://raw.githubusercontent.com/s-xync/viral-waitlist/master/pics/Screen%20Shot%202019-11-24%20at%204.06.52%20PM.png)
 ![13](https://raw.githubusercontent.com/s-xync/viral-waitlist/master/pics/Screen%20Shot%202019-11-24%20at%204.07.41%20PM.png)
 ![14](https://raw.githubusercontent.com/s-xync/viral-waitlist/master/pics/Screen%20Shot%202019-11-24%20at%204.08.19%20PM.png)
