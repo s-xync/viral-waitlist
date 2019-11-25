@@ -57,6 +57,7 @@ yarn start
 ![12](https://raw.githubusercontent.com/s-xync/viral-waitlist/master/pics/Screen%20Shot%202019-11-24%20at%204.06.52%20PM.png)
 ![13](https://raw.githubusercontent.com/s-xync/viral-waitlist/master/pics/Screen%20Shot%202019-11-24%20at%204.07.41%20PM.png)
 ![14](https://raw.githubusercontent.com/s-xync/viral-waitlist/master/pics/Screen%20Shot%202019-11-24%20at%204.08.19%20PM.png)
+![15](https://raw.githubusercontent.com/s-xync/viral-waitlist/master/pics/Screen%20Shot%202019-11-25%20at%203.57.47%20PM.png)
 
 
 ### You can access the live version of this project [here](https://viral-waitlist.surge.sh/).
